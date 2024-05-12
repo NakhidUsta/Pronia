@@ -11,5 +11,6 @@ namespace Pronia.Context
         }
         public DbSet<Slide> Slides { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
     }
 }
