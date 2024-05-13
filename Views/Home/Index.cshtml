@@ -1,4 +1,5 @@
-﻿@*@using Pronia.Models.ViewModels;
+﻿
+@using Pronia.Models.ViewModels;
 
 @model HomeViewModel
 <!-- Begin Slider Area -->
@@ -152,12 +153,12 @@
                                 <div class="col-xl-3 col-md-4 col-sm-6">
                                     <div class="product-item">
                                         <div class="product-img">
-                                            <a href="shop.html">
+                                            <a asp-controller="product" asp-action="detail" asp-route-id="@product.Id">
                                                 <img class="primary-img"
-                                                     src="~/assets/images/website-images//@product.ImagePrimary"
+                                                     src="~/assets/images/website-images//@product.Images.FirstOrDefault(pi=>pi.Type==ImageType.Main)?.Url"
                                                      alt="Product Images" />
                                                 <img class="secondary-img"
-                                                     src="~/assets/images/website-images//@product.ImageSecondary"
+                                                     src="~/assets/images/website-images//@product.Images.FirstOrDefault(pi=>pi.Type==ImageType.Hover)?.Url"
                                                      alt="Product Images" />
                                             </a>
                                             <div class="product-add-action">
@@ -231,12 +232,12 @@
                                 <div class="col-xl-3 col-md-4 col-sm-6">
                                     <div class="product-item">
                                         <div class="product-img">
-                                            <a href="shop.html">
+                                            <a asp-controller="product" asp-action="detail" asp-route-id="@product.Id">
                                                 <img class="primary-img"
-                                                     src="~/assets/images/website-images//@product.ImagePrimary"
+                                                     src="~/assets/images/website-images//@product.Images.FirstOrDefault(pi=>pi.Type==ImageType.Main)?.Url"
                                                      alt="Product Images" />
                                                 <img class="secondary-img"
-                                                     src="~/assets/images/website-images//@product.ImageSecondary"
+                                                     src="~/assets/images/website-images//@product.Images.FirstOrDefault(pi=>pi.Type==ImageType.Hover)?.Url"
                                                      alt="Product Images" />
                                             </a>
                                             <div class="product-add-action">
@@ -309,12 +310,12 @@
                                 <div class="col-xl-3 col-md-4 col-sm-6">
                                     <div class="product-item">
                                         <div class="product-img">
-                                            <a href="shop.html">
+                                            <a asp-controller="product" asp-action="detail" asp-route-id="@product.Id">
                                                 <img class="primary-img"
-                                                     src="~/assets/images/website-images//@product.ImagePrimary"
+                                                     src="~/assets/images/website-images//@product.Images.FirstOrDefault(pi=>pi.Type==ImageType.Main)?.Url"
                                                      alt="Product Images" />
                                                 <img class="secondary-img"
-                                                     src="~/assets/images/website-images//@product.ImageSecondary"
+                                                     src="~/assets/images/website-images//@product.Images.FirstOrDefault(pi=>pi.Type==ImageType.Hover)?.Url"
                                                      alt="Product Images" />
                                             </a>
                                             <div class="product-add-action">
@@ -997,4 +998,3 @@
     </div>
 </div>
 <!-- Blog Area End Here -->
-*@

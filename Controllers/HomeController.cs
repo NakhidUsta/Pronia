@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Pronia.Context;
+using Pronia.Extencions.Enums;
 using Pronia.Models;
 using Pronia.Models.ViewModels;
 
@@ -142,9 +143,9 @@ namespace Pronia.Controllers
             //await context.SaveChangesAsync();
 
             IEnumerable<Slide> slides= await context.Slides.ToListAsync();
-            IEnumerable<Product> productsFromDbLatest = await context.Products.OrderByDescending(p => p.Id).Take(8).ToListAsync();
-            IEnumerable<Product> productsFromDbFeatured = await context.Products.Take(8).ToListAsync();
-            IEnumerable<Product> productsFromDbCheapest = await context.Products.OrderBy(p => p.Price).Take(8).ToListAsync();
+            IEnumerable<Product> productsFromDbLatest = await context.Products.Include(p=>p.Images.Where(pi=>pi.Type!=ImageType.Additional)).OrderByDescending(p => p.Id).Take(8).ToListAsync();
+            IEnumerable<Product> productsFromDbFeatured = await context.Products.Include(p => p.Images.Where(pi => pi.Type != ImageType.Additional)).Take(8).ToListAsync();
+            IEnumerable<Product> productsFromDbCheapest = await context.Products.Include(p => p.Images.Where(pi => pi.Type != ImageType.Additional)).OrderBy(p => p.Price).Take(8).ToListAsync();
 
 
             HomeViewModel vm = new HomeViewModel
