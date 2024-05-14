@@ -7,5 +7,9 @@
         public string? Description { get; set; }
         public decimal Price { get; set; }
         public ICollection<ProductImage> Images { get; set; } = new List<ProductImage> ();
+        public int CategoryId { get; set; }
+        public Category Category { get; set; } = null!;
+        public ICollection<ProductTag> ProductTags { get; set; }=new List<ProductTag> ();
+        public string Sku { get; set; }=null!;
     }
 }

@@ -100,7 +100,7 @@
                                     <a href="tel://+00-123-456-789">+00 123 456 789</a>
                                 </div>
 
-                                <a href="index.html" class="header-logo">
+                                <a asp-controller ="home" asp-action="index"  class="header-logo">
                                     <img src="~/assets/images/logo/dark.png" alt="Header Logo" />
                                 </a>
 
@@ -165,10 +165,10 @@
                                 <nav class="main-nav">
                                     <ul>
                                         <li class="drop-holder">
-                                            <a href="index.html">Home</a>
+                                            <a asp-controller="home" asp-action="index">Home</a>
                                             <ul class="drop-menu">
                                                 <li>
-                                                    <a href="index.html">Home One</a>
+                                                    <a asp-controller="home" asp-action="index" >Home One</a>
                                                 </li>
                                                 <li>
                                                     <a href="index-2.html">Home Two</a>
@@ -182,7 +182,7 @@
                                                     <span class="title">Shop Layout</span>
                                                     <ul>
                                                         <li>
-                                                            <a href="shop.html">Shop Default</a>
+                                                            <a  >Shop Default</a>
                                                         </li>
                                                         <li>
                                                             <a href="shop-grid-fullwidth.html">Shop Grid Fullwidth</a>
@@ -205,7 +205,7 @@
                                                     <span class="title">Product Style</span>
                                                     <ul>
                                                         <li>
-                                                            <a href="single-product-variable.html">Single Product Variable</a>
+                                                            <a >Single Product Variable</a>
                                                         </li>
                                                         <li>
                                                             <a href="single-product-group.html">Single Product Group</a>
