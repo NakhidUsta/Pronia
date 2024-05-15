@@ -15,4 +15,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\Manage\ViewModels\" />
+    <Folder Include="wwwroot\admin\" />
+  </ItemGroup>
+
 </Project>
