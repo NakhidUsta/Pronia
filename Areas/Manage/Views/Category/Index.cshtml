@@ -43,7 +43,15 @@
                                     @category.Products.Count
                                 </td>
                                 <td>
-                                    Settings
+                                    <a class="btn btn-warning" asp-controller="category" asp-action="update" asp-route-id="@category.Id">
+                                        <i class="mdi mdi-lead-pencil"></i>
+                                    </a>
+                                    <a class="btn btn-danger" asp-controller="category" asp-action="delete" asp-route-id="@category.Id">
+                                        <i class="mdi mdi-delete"></i>
+                                    </a>
+                                    <a class="btn btn-primary" asp-controller="category" asp-action="detail" asp-route-id="@category.Id">
+                                        <i class="mdi mdi-logout-variant"></i>
+                                    </a>
                                 </td>
                                
                             </tr>
