@@ -1,0 +1,42 @@
+﻿@model Slide
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Page</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+       
+        .image-container {
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-4">
+               
+                <div class="image-container">
+                    <img src="~/assets/images/website-images/@Model.Image" class="img-fluid" alt="Slide Image">
+                </div>
+            </div>
+            <div class="col-md-8">
+             
+                <h1>@Model.Title</h1>
+                <p>@Model.Description</p>
+                <ul class="list-group">
+                    <li class="list-group-item"><strong>SubTitle:</strong> @Model.SubTitle</li>
+                    <li class="list-group-item"><strong>Order:</strong> @Model.Order</li>
+             
+                </ul>
+            </div>
+        </div>
+    </div>
+
+   
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

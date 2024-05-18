@@ -77,6 +77,14 @@ namespace Pronia.Areas.Manage.Controllers
              await   context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        public async Task<IActionResult> Detail(int id)
+        {
+            if (id <= 0) return BadRequest();
+            Category? categoryFromDb = await context.Categories.FirstOrDefaultAsync(c => c.Id == id);
+            if (categoryFromDb == null) return NotFound();
+            return View(categoryFromDb);
+
+        }
 
     }
 }
