@@ -1,0 +1,78 @@
+﻿@using Pronia.Extencions.Enums;
+@model IEnumerable<Product>
+@{
+    int count = 0;
+}
+
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Product Table</h4>
+            <a class="btn btn-success " asp-action="create" asp-controller="category">Create</a>
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                No
+                            </th>
+                            <th>
+                                Image
+                            </th>
+                            <th>
+                                Product Name
+                            </th>
+                            <th>
+                                Price
+                            </th>
+                            <th>
+                                Category Name
+                            </th>
+                            <th>
+                               Settings
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Product product in Model)
+                        {
+                            count++;
+                            <tr>
+                                <td>
+                                    @count
+                                </td>
+                                <td>
+                                    <img style="width:100px; height:100px;border-radius:8px;" src="~/uploads/images/products/@product.Images.FirstOrDefault(pi=>pi.Type==ImageType.Main)?.Url">
+                                </td>
+                                <td>
+                                    @product.Name
+                                </td>
+                                <td>
+                                    @product.Price
+                                </td>
+                                <td>
+                                    @product.Category.Name
+                                </td>
+                                <td>
+                                    <a class="btn btn-warning" asp-controller="product" asp-action="update" asp-route-id="@product.Id">
+                                        <i class="mdi mdi-lead-pencil"></i>
+                                    </a>
+                                    <a class="btn btn-danger" asp-controller="product" asp-action="delete" asp-route-id="@product.Id">
+                                        <i class="mdi mdi-delete"></i>
+                                    </a>
+                                    <a class="btn btn-primary" asp-controller="product" asp-action="detail" asp-route-id="@product.Id">
+                                        <i class="mdi mdi-logout-variant"></i>
+                                    </a>
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

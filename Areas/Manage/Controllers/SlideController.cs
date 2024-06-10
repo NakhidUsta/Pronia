@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Pronia.Areas.Manage.ViewModels;
 using Pronia.Context;
 using Pronia.Extencions;
+using Pronia.Extencions.Enums;
 using Pronia.Models;
 using System.Drawing;
 
@@ -104,12 +105,13 @@ namespace Pronia.Areas.Manage.Controllers
             if (slide == null) return NotFound();
             if(slideVM.Photo is not null)
             {
-                if (!slideVM.Photo.ContentType.StartsWith("image/"))
+                if (!slideVM.Photo.CheckFileType(FileType.Image))
+                
                 {
                     ModelState.AddModelError("Photo", "Please Upload Image");
                     return View(slideVM);
                 }
-                if (slideVM.Photo.Length > 2 * 1024 * 1024)
+                if (!slideVM.Photo.CheckFileSize(2,FileSize.Mb))
                 {
                     ModelState.AddModelError("Photo", "Invalid Photo Size");
                     return View(slideVM);

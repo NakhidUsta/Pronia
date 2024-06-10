@@ -1,7 +1,11 @@
-﻿namespace Pronia.Models
+﻿using Pronia.Extencions.Enums;
+
+namespace Pronia.Models
 {
     public class Product
     {
+        public ImageType Type;
+
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public string? Description { get; set; }
