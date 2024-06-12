@@ -54,6 +54,7 @@ namespace Pronia.Areas.Manage.Controllers
                 Description = slideVM.Description,
                 Image = fileName
             };
+            
             await context.Slides.AddAsync(newSlide);
             await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

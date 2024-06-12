@@ -1,0 +1,74 @@
+﻿@model ProductCreateVM
+<div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Create Product</h4>
+            <p class="card-description">
+                Basic form layout
+            </p>
+            <form method="post" class="forms-sample" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label asp-for="MainPhoto"></label>
+                    <input asp-for="MainPhoto" class="form-control" placeholder="MainPhoto">
+                    <span class="text-danger" asp-validation-for="MainPhoto"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="HoverPhoto"></label>
+                    <input asp-for="HoverPhoto" class="form-control" placeholder="HoverPhoto">
+                    <span class="text-danger" asp-validation-for="HoverPhoto"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="AdditionalPhoto"></label>
+                    <input asp-for="AdditionalPhoto" class="form-control" placeholder="AdditionalPhoto">
+                    <span class="text-danger" asp-validation-for="AdditionalPhoto"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Name"></label>
+                    <input asp-for="Name" class="form-control" placeholder="Name">
+                    <span class="text-danger" asp-validation-for="Name"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Sku"></label>
+                    <input asp-for="Sku" class="form-control" placeholder="Sku">
+                    <span class="text-danger" asp-validation-for="Sku"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description"></label>
+                    <input asp-for="Description" class="form-control" placeholder="Description">
+                    <span class="text-danger" asp-validation-for="Description"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Price"></label>
+                    <input asp-for="Price" class="form-control" placeholder="Price">
+                    <span class="text-danger" asp-validation-for="Price"></span>
+                </div>
+               
+                <div class="form-group">
+                    <label asp-for="CategoryId"></label>
+                    <select asp-for="CategoryId" asp-items="new SelectList(Model.Categories, nameof(Category.Id),nameof(Category.Name))">
+                        <option Selected disabled>Choose Category</option>
+                    </select>
+                    <span class="text-danger" asp-validation-for="CategoryId"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="TagIds"></label>
+                    <select asp-for="TagIds" asp-items="new SelectList(Model.Tags, nameof(Tag.Id),nameof(Tag.Name))">
+                        <option Selected disabled>Choose Tag</option>
+                    </select>
+                    <span class="text-danger" asp-validation-for="TagIds"></span>
+                </div>
+       
+                <div class="form-group">
+                    <label asp-for="ColorIds"></label>
+                    <select asp-for="ColorIds" asp-items="new SelectList(Model.Colors, nameof(Color.Id),nameof(Color.Name))">
+                        <option Selected disabled>Choose Color</option>
+                    </select>
+                    <span class="text-danger" asp-validation-for="ColorIds"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary me-2">Submit</button>
+                <button class="btn btn-light" asp-controller="product" asp-action="index">Cancel</button>
+            </form>
+        </div>
+    </div>
+</div>

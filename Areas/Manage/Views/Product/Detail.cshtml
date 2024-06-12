@@ -1,0 +1,45 @@
+﻿@using Pronia.Extencions.Enums;
+@model Product
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Page</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+
+        .image-container {
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-4">
+
+                <div class="image-container">
+                    <img style="width:100px; height:100px;border-radius:8px;" src="~/uploads/images/products/@Model.Images.FirstOrDefault(pi=>pi.Type==ImageType.Main)?.Url">
+                </div>
+            </div>
+            <div class="col-md-8">
+
+                <h1>@Model.Name</h1>
+                <p>@Model.Description</p>
+               
+                <ul class="list-group">
+                    <li class="list-group-item"><strong>Price:</strong> @Model.Price</li>
+                    <li class="list-group-item"><strong>Sku:</strong> @Model.Sku</li>
+                    
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

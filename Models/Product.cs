@@ -14,6 +14,7 @@ namespace Pronia.Models
         public int CategoryId { get; set; }
         public Category Category { get; set; } = null!;
         public ICollection<ProductTag> ProductTags { get; set; }=new List<ProductTag> ();
+        public ICollection<ProductColor> ProductColors { get; set; } = new List<ProductColor>();
         public string Sku { get; set; }=null!;
     }
 }

@@ -8,7 +8,7 @@
     <div class="card">
         <div class="card-body">
             <h4 class="card-title">Product Table</h4>
-            <a class="btn btn-success " asp-action="create" asp-controller="category">Create</a>
+            <a class="btn btn-success " asp-action="create" asp-controller="product">Create</a>
 
             <div class="table-responsive">
                 <table class="table table-striped">
@@ -55,6 +55,7 @@
                                 <td>
                                     @product.Category.Name
                                 </td>
+                                
                                 <td>
                                     <a class="btn btn-warning" asp-controller="product" asp-action="update" asp-route-id="@product.Id">
                                         <i class="mdi mdi-lead-pencil"></i>
