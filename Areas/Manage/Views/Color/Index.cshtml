@@ -1,0 +1,66 @@
+﻿@using Pronia.Extencions.Enums;
+@model IEnumerable<Color>
+@{
+    int count = 0;
+}
+
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Tag Table</h4>
+            <a class="btn btn-success " asp-action="create" asp-controller="color">Create</a>
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                No
+                            </th>
+
+                            <th>
+                                Color Name
+                            </th>
+
+
+                            <th>
+                                Settings
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Color color in Model)
+                        {
+                            count++;
+                            <tr>
+                                <td>
+                                    @count
+                                </td>
+
+                                <td>
+                                    @color.Name
+                                </td>
+
+
+                                <td>
+                                    <a class="btn btn-warning" asp-controller="color" asp-action="update" asp-route-id="@color.Id">
+                                        <i class="mdi mdi-lead-pencil"></i>
+                                    </a>
+                                    <a class="btn btn-danger" asp-controller="color" asp-action="delete" asp-route-id="@color.Id">
+                                        <i class="mdi mdi-delete"></i>
+                                    </a>
+                                    <a class="btn btn-primary" asp-controller="color" asp-action="detail" asp-route-id="@color.Id">
+                                        <i class="mdi mdi-logout-variant"></i>
+                                    </a>
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

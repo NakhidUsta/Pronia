@@ -1,5 +1,5 @@
 ﻿@using Pronia.Extencions.Enums;
-@model Product
+@model ProductDetailVM
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,7 +21,15 @@
             <div class="col-md-4">
 
                 <div class="image-container">
-                    <img style="width:100px; height:100px;border-radius:8px;" src="~/uploads/images/products/@Model.Images.FirstOrDefault(pi=>pi.Type==ImageType.Main)?.Url">
+                    <h1>Main Photo</h1>
+                    <img style="width:100px; height:100px;border-radius:8px; margin:10px;" src="~/uploads/images/products/@Model.Images.FirstOrDefault(i=>i.Type==ImageType.Main)?.Url">
+                    <h1>Hover Photo</h1>
+                    <img style="width:100px; height:100px;border-radius:8px; margin:10px;" src="~/uploads/images/products/@Model.Images.FirstOrDefault(i=>i.Type==ImageType.Hover)?.Url">
+                    <h1>Additional Photo</h1>
+                    @foreach (ProductImage pi in Model.Images.Where(i=>i.Type==ImageType.Additional))
+                    {
+                        <img style="width:100px; height:100px;border-radius:8px; margin:10px;" src="~/uploads/images/products/@pi.Url">
+                    }
                 </div>
             </div>
             <div class="col-md-8">
@@ -32,7 +40,20 @@
                 <ul class="list-group">
                     <li class="list-group-item"><strong>Price:</strong> @Model.Price</li>
                     <li class="list-group-item"><strong>Sku:</strong> @Model.Sku</li>
-                    
+                    <li class="list-group-item"><strong>Category:</strong> @Model.CategoryName</li>
+                    <li class="list-group-item">
+                        <strong>Tags:</strong>  @foreach (Tag tag in Model.Tags)
+                        {
+                            @(tag.Name+" ")
+                        }
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Colors:</strong>  @foreach (Color color in Model.Colors)
+                        {
+                            @(color.Name+" ")
+                        }
+                    </li>
+
 
                 </ul>
             </div>

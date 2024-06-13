@@ -1,0 +1,24 @@
+﻿@using Pronia.Areas.Manage.ViewModels
+@model ColorCreateVM
+<div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Color </h4>
+            <p class="card-description">
+                Basic form layout
+            </p>
+            <form method="post" class="forms-sample" enctype="multipart/form-data">
+
+                <div class="form-group">
+                    <label asp-for="Name"></label>
+                    <input asp-for="Name" class="form-control" placeholder="Name">
+                    <span class="text-danger" asp-validation-for="Name"></span>
+                </div>
+
+
+                <button type="submit" class="btn btn-primary me-2">Submit</button>
+                <button class="btn btn-light" asp-controller="color" asp-action="index">Cancel</button>
+            </form>
+        </div>
+    </div>
+</div>

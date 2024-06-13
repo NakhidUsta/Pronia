@@ -121,7 +121,7 @@ namespace Pronia.Areas.Manage.Controllers
 
                     }
                     string fileName = await additionalPhoto.CreateFileAsync(env.WebRootPath, "uploads", "images", "products");
-                    product.Images.Add(new ProductImage { Type = ImageType.Main, Url = fileName });
+                    product.Images.Add(new ProductImage { Type = ImageType.Additional, Url = fileName });
                 }
             }
             if(!await context.Categories.AnyAsync(c => c.Id == vm.CategoryId))
@@ -167,7 +167,7 @@ namespace Pronia.Areas.Manage.Controllers
             
             string mainImg = await vm.MainPhoto.CreateFileAsync(env.WebRootPath,"uploads", "images", "products");
             product.Images.Add(new ProductImage { Type = ImageType.Main, Url = mainImg });
-            string hoverImg = await vm.MainPhoto.CreateFileAsync(env.WebRootPath, "uploads", "images", "products");
+            string hoverImg = await vm.HoverPhoto.CreateFileAsync(env.WebRootPath, "uploads", "images", "products");
             product.Images.Add(new ProductImage { Type = ImageType.Hover, Url = hoverImg });
 
             await context.AddAsync(product);
@@ -186,8 +186,34 @@ namespace Pronia.Areas.Manage.Controllers
                 .Include(p=>p.ProductColors).ThenInclude(pc=>pc.Color)
                 .FirstOrDefaultAsync(p => p.Id == id);
             if (productFromDb == null) return NotFound();
-            return View(productFromDb);
+            ProductDetailVM vm = new ProductDetailVM
+            {
+                Id = productFromDb.Id,
+                Name = productFromDb.Name,
+                Price = productFromDb.Price,
+                Description = productFromDb.Description,
+                Sku = productFromDb.Sku,
+                CategoryName = productFromDb.Category.Name,
+                Tags = productFromDb.ProductTags.Select(pt => pt.Tag).ToList(),
+                Colors=productFromDb.ProductColors.Select(pc=>pc.Color).ToList(),
+                Images=productFromDb.Images
 
+            };
+            return View(vm);
+
+        }
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (id <= 0) return BadRequest();
+            Product? productFromDb = await context.Products.Include(p=>p.Images).FirstOrDefaultAsync(p => p.Id == id);
+            if(productFromDb  == null) return NotFound();
+            foreach(ProductImage pi in productFromDb.Images)
+            {
+                pi.Url.DeleteFile(env.WebRootPath, "uploads", "images", "products");
+            }
+            context.Products.Remove(productFromDb);
+            await context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
     }
 }
