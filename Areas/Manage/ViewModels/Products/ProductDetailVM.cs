@@ -12,8 +12,8 @@ namespace Pronia.Areas.Manage.ViewModels
         public ICollection<ProductImage> Images { get; set; } = null!;
 
         public string CategoryName { get; set; } = null!;
-        public ICollection<Tag> Tags { get; set; } 
-        public ICollection<Color> Colors { get; set; } 
-        
+        public ICollection<Tag> Tags { get; set; } = null!;
+        public ICollection<Color> Colors { get; set; } = null!;
+
     }
 }

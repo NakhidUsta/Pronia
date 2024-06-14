@@ -215,5 +215,50 @@ namespace Pronia.Areas.Manage.Controllers
             await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        public async Task<IActionResult> Update(int id)
+        {
+            if(id<=0) return BadRequest();
+            Product? product = await context.Products.FirstOrDefaultAsync(p => p.Id == id);
+            if(product==null) return NotFound();
+            IEnumerable<Product> products = await context.Products.ToListAsync();
+           
+            return View(new ProductUpdateVM
+            { 
+              Id=product.Id,
+              Name=product.Name,
+              Sku=product.Sku,
+              Price=product.Price,
+              Description=product.Description,
+              CategoryId=product.CategoryId,
+              Categories=await context.Categories.ToListAsync(),
+            });
+        }
+        [HttpPost]
+        public async Task<IActionResult> Update(int id, ProductUpdateVM vm)
+        {
+            if (id <= 0) return BadRequest();
+            Product? product = await context.Products.FirstOrDefaultAsync(p => p.Id == id);
+            if (product == null) return NotFound();
+            if(ModelState.IsValid)
+            {
+                vm.Categories=await context.Categories.ToListAsync();
+              
+                return View(vm);
+            }
+            if(!await context.Categories.AnyAsync(c=>c.Id==vm.CategoryId))
+            {
+                vm.Categories = await context.Categories.ToListAsync();
+                ModelState.AddModelError("CategoryId", "Category doesnt exists!");
+                return View(vm);
+            } 
+            product.Name= vm.Name;
+            product.Sku=vm.Sku;
+            product.Price=vm.Price;
+            product.Description = vm.Description;
+            product.CategoryId=vm.CategoryId;
+            await context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+           
+        }
     }
 }
