@@ -218,9 +218,13 @@ namespace Pronia.Areas.Manage.Controllers
         public async Task<IActionResult> Update(int id)
         {
             if(id<=0) return BadRequest();
-            Product? product = await context.Products.FirstOrDefaultAsync(p => p.Id == id);
+            Product? product = await context.Products
+                .Include(p=>p.Images)
+                .Include(p=>p.ProductTags)
+                .Include(p=>p.ProductColors)
+                .FirstOrDefaultAsync(p => p.Id == id);
             if(product==null) return NotFound();
-            IEnumerable<Product> products = await context.Products.ToListAsync();
+           
            
             return View(new ProductUpdateVM
             { 
@@ -231,31 +235,174 @@ namespace Pronia.Areas.Manage.Controllers
               Description=product.Description,
               CategoryId=product.CategoryId,
               Categories=await context.Categories.ToListAsync(),
+              TagIds=await context.ProductTags.Select(p=>p.TagId).ToListAsync(),
+              Tags=await context.Tags.ToListAsync(),
+                Colors = await context.Colors.ToListAsync(),
+                ColorIds = await context.ProductColors.Select(p => p.ColorId).ToListAsync(),
+              Images =product.Images,
             });
         }
         [HttpPost]
         public async Task<IActionResult> Update(int id, ProductUpdateVM vm)
         {
             if (id <= 0) return BadRequest();
-            Product? product = await context.Products.FirstOrDefaultAsync(p => p.Id == id);
+            Product? product = await context.Products
+                .Include(p=>p.Images)
+                .Include(p=>p.ProductTags).ThenInclude(pt=>pt.Tag)
+                .Include(p=>p.ProductColors).ThenInclude(pc=>pc.Color)
+                .FirstOrDefaultAsync(p => p.Id == id);
             if (product == null) return NotFound();
-            if(ModelState.IsValid)
+            if(!ModelState.IsValid)
             {
                 vm.Categories=await context.Categories.ToListAsync();
-              
+                vm.Tags = await context.Tags.ToListAsync();
+                vm.Colors = await context.Colors.ToListAsync();
+                vm.Images = product.Images;
                 return View(vm);
             }
-            if(!await context.Categories.AnyAsync(c=>c.Id==vm.CategoryId))
+            if (vm.MainPhoto != null)
             {
-                vm.Categories = await context.Categories.ToListAsync();
-                ModelState.AddModelError("CategoryId", "Category doesnt exists!");
-                return View(vm);
-            } 
+                if (!vm.MainPhoto.CheckFileType(FileType.Image))
+                {
+                    vm.Categories = await context.Categories.ToListAsync();
+                    vm.Tags = await context.Tags.ToListAsync();
+                    vm.Colors = await context.Colors.ToListAsync();
+                    vm.Images = product.Images;
+                    ModelState.AddModelError("MainPhoto", "Please Upload Photo!");
+                    return View(vm);
+
+                }
+                if (!vm.MainPhoto.CheckFileSize(2,FileSize.Mb))
+                {
+                    vm.Categories = await context.Categories.ToListAsync();
+                    vm.Tags = await context.Tags.ToListAsync();
+                    vm.Colors = await context.Colors.ToListAsync();
+                    vm.Images = product.Images;
+                    ModelState.AddModelError("MainPhoto", "Please Upload Photo 2mb less!");
+                    return View(vm);
+
+                }
+
+                
+            }
+            if (vm.HoverPhoto != null)
+            {
+                if (!vm.HoverPhoto.CheckFileType(FileType.Image))
+                {
+                    vm.Categories = await context.Categories.ToListAsync();
+                    vm.Tags = await context.Tags.ToListAsync();
+                    vm.Colors = await context.Colors.ToListAsync();
+                    vm.Images = product.Images;
+                    ModelState.AddModelError("HoverPhoto", "Please Upload Photo!");
+                    return View(vm);
+
+                }
+                if (!vm.HoverPhoto.CheckFileSize(2, FileSize.Mb))
+                {
+                    vm.Categories = await context.Categories.ToListAsync();
+                    vm.Tags = await context.Tags.ToListAsync();
+                    vm.Colors = await context.Colors.ToListAsync();
+                    vm.Images = product.Images;
+                    ModelState.AddModelError("HoverPhoto", "Please Upload Photo 2mb less!");
+                    return View(vm);
+
+                }
+
+            }
+            StringBuilder sb = new StringBuilder();
+            if (product.CategoryId!=vm.CategoryId)
+            {
+                if(!await context.Categories.AnyAsync(c=>c.Id==vm.CategoryId))
+                {
+                    vm.Categories = await context.Categories.ToListAsync();
+                    vm.Tags = await context.Tags.ToListAsync();
+                    vm.Colors = await context.Colors.ToListAsync();
+                    ModelState.AddModelError("CategoryId", "Category doesnt exists!");
+                    return View(vm);
+                } 
+
+            product.CategoryId=vm.CategoryId;
+            }
+            foreach(int tagId in vm.TagIds)
+            {
+                if (!product.ProductTags.Any(pt => pt.TagId == tagId))
+                {
+                    product.ProductTags.Add(new ProductTag { TagId = tagId });
+                }
+            }
+            ICollection<ProductTag> removeable = new List<ProductTag>();
+            foreach(ProductTag pt in product.ProductTags)
+            {
+                if (!vm.TagIds.Any(id => id == pt.TagId))
+                {
+                    removeable.Add(pt);
+                }
+            }
+            if (removeable.Count > 0) context.ProductTags.RemoveRange(removeable);
+            foreach (int colorId in vm.ColorIds)
+            {
+                if (!product.ProductColors.Any(pt => pt.ColorId ==colorId))
+                {
+                    product.ProductColors.Add(new ProductColor {ColorId  = colorId });
+                }
+            }
+            ICollection<ProductColor> removeablecolor = new List<ProductColor>();
+            foreach (ProductColor pc in product.ProductColors)
+            {
+                if (!vm.ColorIds.Any(id => id == pc.ColorId))
+                {
+                    removeablecolor.Add(pc);
+
+                }
+            }
+            if (removeablecolor.Count > 0) context.ProductColors.RemoveRange(removeablecolor);
+            if (vm.MainPhoto is not null)
+            {
+                string fileName = await vm.MainPhoto.CreateFileAsync(env.WebRootPath, "uploads", "images", "products");
+                ProductImage? mainImage = product.Images.FirstOrDefault(i => i.Type == ImageType.Main);
+                if(mainImage is not null)
+                {
+                    mainImage.Url.DeleteFile(env.WebRootPath, "uploads", "images", "products");
+                    mainImage.Url = fileName;
+                }
+            }
+            if (vm.HoverPhoto is not null)
+            {
+                string fileName = await vm.HoverPhoto.CreateFileAsync(env.WebRootPath, "uploads", "images", "products");
+                ProductImage? hoverImage = product.Images.FirstOrDefault(i => i.Type == ImageType.Hover);
+                if (hoverImage is not null)
+                {
+                    hoverImage.Url.DeleteFile(env.WebRootPath, "uploads", "images", "products");
+                    hoverImage.Url = fileName;
+                }
+            }
+            if (vm.ImageIds is not null)
+            {
+                foreach (ProductImage pi in product.Images.Where(pi => pi.Type == ImageType.Additional))
+                {
+                    if (!vm.ImageIds.Any(id => pi.Id == id))
+                    {
+                        pi.Url.DeleteFile(env.WebRootPath, "uploads", "images", "products");
+                        context.ProductImages.Remove(pi);
+                    }
+                }
+            }
+            else product.Images = product.Images.Where(pi => pi.Type != ImageType.Additional).ToList();
+            if (vm.AdditionalPhoto  is not null)
+            {
+                foreach(IFormFile photo in vm.AdditionalPhoto)
+                {
+                    if (!photo.CheckFileType(FileType.Image)) sb.AppendLine($"File with name{photo.FileName} didnt created");
+                    if (!photo.CheckFileSize(2, FileSize.Mb)) sb.AppendLine($"Size must be less than 2MB!");
+                    string fileName = await photo.CreateFileAsync(env.WebRootPath, "uploads", "images", "products");
+                    product.Images.Add(new ProductImage { Url = fileName, Type = ImageType.Additional });
+                    
+                }
+            }
             product.Name= vm.Name;
             product.Sku=vm.Sku;
             product.Price=vm.Price;
             product.Description = vm.Description;
-            product.CategoryId=vm.CategoryId;
             await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
            

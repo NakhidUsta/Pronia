@@ -11,8 +11,8 @@ using Pronia.Context;
 namespace Pronia.Context.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240611214638_Colors")]
-    partial class Colors
+    [Migration("20240619190332_mig2")]
+    partial class mig2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
