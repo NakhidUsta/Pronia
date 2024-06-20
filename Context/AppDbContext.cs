@@ -17,5 +17,6 @@ namespace Pronia.Context
         public DbSet<ProductTag> ProductTags { get; set; }
         public DbSet<Color> Colors { get; set; }
         public DbSet<ProductColor> ProductColors { get; set; }
+        public DbSet<Setting> Settings { get; set; }
     }
 }

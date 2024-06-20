@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Pronia.Services;
+@inject LayoutService service;
+@{
+    Dictionary<string, string> settings = await service.GetSettingsAsync();
+}
+<!DOCTYPE html>
 <html lang="zxx">
 <head>
     <meta charset="UTF-8" />
@@ -97,11 +102,11 @@
                             <div class="header-middle-wrap position-relative">
                                 <div class="header-contact d-none d-lg-flex">
                                     <i class="pe-7s-call"></i>
-                                    <a href="tel://+00-123-456-789">+00 123 456 789</a>
+                                    <a href="tel://+@settings["phone"]">@settings["phone"]</a>
                                 </div>
 
                                 <a asp-controller ="home" asp-action="index"  class="header-logo">
-                                    <img src="~/assets/images/logo/dark.png" alt="Header Logo" />
+                                    <img src="~/assets/images/logo/@settings["logo"]" alt="Header Logo" />
                                 </a>
 
                                 <div class="header-right">
@@ -111,7 +116,7 @@
                                                class="search-btn bt"
                                                data-bs-toggle="modal"
                                                data-bs-target="#exampleModal">
-                                                <i class="pe-7s-search"></i>
+                                               @Html.Raw( @settings["search-icon"])
                                             </a>
                                         </li>
                                         <li class="dropdown d-none d-lg-block">
@@ -290,7 +295,7 @@
                         <div class="row align-items-center">
                             <div class="col-lg-3 col-6">
                                 <a href="index.html" class="header-logo">
-                                    <img src="~/assets/images/logo/dark.png" alt="Header Logo" />
+                                    <img src="~/assets/images/logo/@settings["logo"]" alt="Header Logo" />
                                 </a>
                             </div>
                             <div class="col-lg-6 d-none d-lg-block">
@@ -476,7 +481,7 @@
                         </div>
                         <div class="header-contact offcanvas-contact">
                             <i class="pe-7s-call"></i>
-                            <a href="tel://+00-123-456-789">+00 123 456 789</a>
+                            <a href="tel://+@settings["phone"]">+@settings["phone"]</a>
                         </div>
                         <div class="offcanvas-user-info">
                             <ul class="dropdown-wrap">
@@ -905,7 +910,7 @@
                             <div class="footer-widget-item">
                                 <div class="footer-widget-logo">
                                     <a href="index.html">
-                                        <img src="~/assets/images/logo/dark.png" alt="Logo" />
+                                        <img src="~/assets/images/logo/@settings["logo"]" alt="Logo" />
                                     </a>
                                 </div>
                                 <p class="footer-widget-desc">
@@ -1033,10 +1038,10 @@
                         <div class="col-lg-3 pt-40">
                             <div class="footer-contact-info">
                                 <h3 class="footer-widget-title">Got Question? Call Us</h3>
-                                <a class="number" href="tel://123-456-789">123 456 789</a>
+                                <a class="number" href="tel://@settings["phone"]">@settings["phone"]</a>
                                 <div class="address">
                                     <ul>
-                                        <li>Your Address Goes Here</li>
+                                        <li>@settings["address"]</li>
                                     </ul>
                                 </div>
                             </div>
