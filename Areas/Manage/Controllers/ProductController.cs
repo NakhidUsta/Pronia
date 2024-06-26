@@ -309,7 +309,7 @@ namespace Pronia.Areas.Manage.Controllers
                 }
 
             }
-            StringBuilder sb = new StringBuilder();
+          
             if (product.CategoryId!=vm.CategoryId)
             {
                 if(!await context.Categories.AnyAsync(c=>c.Id==vm.CategoryId))
@@ -327,35 +327,54 @@ namespace Pronia.Areas.Manage.Controllers
             {
                 if (!product.ProductTags.Any(pt => pt.TagId == tagId))
                 {
+                    if (!await context.Tags.AnyAsync(t => t.Id == tagId))
+                    {
+
+                        vm.Categories = await context.Categories.ToListAsync();
+                        vm.Tags = await context.Tags.ToListAsync();
+                        vm.Colors = await context.Colors.ToListAsync();
+                        ModelState.AddModelError("TagId", "TagId doesnt exists!");
+                        return View(vm);
+                    }
                     product.ProductTags.Add(new ProductTag { TagId = tagId });
                 }
             }
-            ICollection<ProductTag> removeable = new List<ProductTag>();
+           
             foreach(ProductTag pt in product.ProductTags)
             {
                 if (!vm.TagIds.Any(id => id == pt.TagId))
                 {
-                    removeable.Add(pt);
+                    context.ProductTags.Remove(pt);
                 }
             }
-            if (removeable.Count > 0) context.ProductTags.RemoveRange(removeable);
+         
             foreach (int colorId in vm.ColorIds)
             {
                 if (!product.ProductColors.Any(pt => pt.ColorId ==colorId))
                 {
+
+                    if (!await context.Colors.AnyAsync(c => c.Id == colorId))
+                    {
+
+                        vm.Categories = await context.Categories.ToListAsync();
+                        vm.Tags = await context.Tags.ToListAsync();
+                        vm.Colors = await context.Colors.ToListAsync();
+                        ModelState.AddModelError("ColorId", "ColorId doesnt exists!");
+                        return View(vm);
+                    }
                     product.ProductColors.Add(new ProductColor {ColorId  = colorId });
                 }
             }
-            ICollection<ProductColor> removeablecolor = new List<ProductColor>();
+          
             foreach (ProductColor pc in product.ProductColors)
             {
                 if (!vm.ColorIds.Any(id => id == pc.ColorId))
                 {
-                    removeablecolor.Add(pc);
+                    context.ProductColors.Remove(pc);
 
                 }
             }
-            if (removeablecolor.Count > 0) context.ProductColors.RemoveRange(removeablecolor);
+           
             if (vm.MainPhoto is not null)
             {
                 string fileName = await vm.MainPhoto.CreateFileAsync(env.WebRootPath, "uploads", "images", "products");
@@ -388,14 +407,18 @@ namespace Pronia.Areas.Manage.Controllers
                 }
             }
             else product.Images = product.Images.Where(pi => pi.Type != ImageType.Additional).ToList();
+            TempData["Errors"] = "";
             if (vm.AdditionalPhoto  is not null)
             {
                 foreach(IFormFile photo in vm.AdditionalPhoto)
                 {
-                    if (!photo.CheckFileType(FileType.Image)) sb.AppendLine($"File with name{photo.FileName} didnt created");
-                    if (!photo.CheckFileSize(2, FileSize.Mb)) sb.AppendLine($"Size must be less than 2MB!");
-                    string fileName = await photo.CreateFileAsync(env.WebRootPath, "uploads", "images", "products");
-                    product.Images.Add(new ProductImage { Url = fileName, Type = ImageType.Additional });
+                    if (!photo.CheckFileType(FileType.Image)) TempData["Errors"] += $"<p class=\"text-danger\"> File with name{photo.FileName} didnt created </p>";
+                    else if (!photo.CheckFileSize(2, FileSize.Mb)) TempData["Errors"] += $"<p class=\"text-danger\" >Size must be less than 2MB!  </p>";
+                    else
+                    {
+                        string fileName = await photo.CreateFileAsync(env.WebRootPath, "uploads", "images", "products");
+                        product.Images.Add(new ProductImage { Url = fileName, Type = ImageType.Additional });
+                    }
                     
                 }
             }

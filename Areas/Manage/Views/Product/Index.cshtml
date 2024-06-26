@@ -8,6 +8,7 @@
     <div class="card">
         <div class="card-body">
             <h4 class="card-title">Product Table</h4>
+            @Html.Raw(TempData["Errors"])
             <a class="btn btn-success " asp-action="create" asp-controller="product">Create</a>
 
             <div class="table-responsive">
