@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Pronia.Areas.Manage.ViewModels;
 using Pronia.Context;
 using Pronia.Models;
 
@@ -14,10 +15,19 @@ namespace Pronia.Areas.Manage.Controllers
         {
             this.context = context;
         }
-        public async Task<IActionResult>Index()
+        public async Task<IActionResult>Index(int page =1, int take =5)
         {
-            IEnumerable<Category> categories = await context.Categories.Include(c => c.Products).ToListAsync();
-            return View(categories);
+            IEnumerable<Category> categories = await context.Categories
+                .Skip((page-1)*take)
+                .Take(take)
+                .Include(c => c.Products).ToListAsync();
+            int categoryCount=await context.Categories.CountAsync();
+            return View(new CategoryIndexVm
+            {
+                Categories=categories,
+                CurrentPage=page,
+                TotalPage=(int)Math.Ceiling((decimal) categoryCount/take)
+            });
         }
         public  IActionResult Create()
         {

@@ -17,6 +17,7 @@ namespace Pronia.Areas.Manage.ViewModels
         public IFormFile MainPhoto { get; set; }=null!;
         [Required]
         public IFormFile HoverPhoto { get; set; } = null!;
+        public IEnumerable<IFormFile>? AdditionalPhoto { get; set; } 
 
         [Range(1,int.MaxValue)]
         public int CategoryId { get; set; }
@@ -24,7 +25,6 @@ namespace Pronia.Areas.Manage.ViewModels
         public IEnumerable<Category>? Categories { get; set; }
         public IEnumerable<Tag>? Tags { get; set; }
         public IEnumerable<int> TagIds { get; set; } = null!;
-        public IEnumerable<IFormFile> AdditionalPhoto { get; set; } = null!;
 
         public IEnumerable<Color>? Colors { get; set; }
         public IEnumerable<int> ColorIds { get; set; }=null !;

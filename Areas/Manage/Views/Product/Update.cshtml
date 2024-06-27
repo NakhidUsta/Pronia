@@ -1,5 +1,6 @@
 ﻿@using Pronia.Extencions.Enums;
 @model ProductUpdateVM
+
 <div class="col-md-6 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
@@ -10,25 +11,27 @@
             <form method="post" class="forms-sample" enctype="multipart/form-data">
                 <div class="form-group">
                     <label asp-for="MainPhoto"></label>
-                    <img style="width:90px; height:90px; margin-bottom:10px;display:block;" src="~/uploads/images/products/@Model.Images.FirstOrDefault(i=>i.Type==ImageType.Main)?.Url" />
+                    <img style="width:90px; height:90px; margin-bottom:10px;display:block;" src="~/uploads/images/products/@Model.Images.FirstOrDefault(pi=>pi.Type==ImageType.Main)?.Url" />
                     <input asp-for="MainPhoto" class="form-control" placeholder="MainPhoto">
                     <span class="text-danger" asp-validation-for="MainPhoto"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="HoverPhoto"></label>
-                    <img style="width:90px; height:90px; margin-bottom:10px;display:block;" src="~/uploads/images/products/@Model.Images.FirstOrDefault(i=>i.Type==ImageType.Hover)?.Url" />
+                    <img style="width:90px; height:90px; margin-bottom:10px;display:block;" src="~/uploads/images/products/@Model.Images.FirstOrDefault(pi=>pi.Type==ImageType.Hover)?.Url" />
                     <input asp-for="HoverPhoto" class="form-control" placeholder="HoverPhoto">
                     <span class="text-danger" asp-validation-for="HoverPhoto"></span>
                 </div>
                <div class="form-group d-flex">
-                    @foreach (ProductImage pi in Model.Images.Where(pi => pi.Type == ImageType.Additional))
+                    @foreach(ProductImage pi in Model.Images.Where(pi=>pi.Type==ImageType.Additional))
                     {
-                        <div style="position:relative;">
-                            <img style="width:140px; height:140px; border-radius:10px;margin:10px;" src="~/uploads/images/products/@pi.Url" />
-                            <button style="position:absolute; right:10px; top:10px;border-radius:10px 0px 10px 0px;" type="button" class="cus-delete-btn btn btn-danger">X</button>
-                            <input asp-for="ImageIds" type="hidden" value="@pi.Id" />
-                        </div>
+                        
+                            <div style="position:relative;">
+                                <img style="width:140px; height:140px; border-radius:10px;margin:10px;" src="~/uploads/images/products/@pi.Url" />
+                                <button style="position:absolute; right:10px; top:10px;border-radius:10px 0px 10px 0px;" type="button" class="cus-delete-btn btn btn-danger">X</button>
+                                <input asp-for="ImageId" type="hidden" value="@pi.Id" />
+                            </div>
                     }
+                    
                </div>
                 <div class="form-group">
                     <label asp-for="AdditionalPhoto"></label>
@@ -64,20 +67,20 @@
                     <span class="text-danger" asp-validation-for="CategoryId"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="TagIds"></label>
-                    <select asp-for="TagIds" asp-items="new SelectList(Model.Tags, nameof(Tag.Id),nameof(Tag.Name))">
-                       
+                    <label asp-for="TagId"></label>
+                    <select asp-for="TagId" asp-items="new SelectList(Model.Tags, nameof(Tag.Id),nameof(Tag.Name))">
                     </select>
-                    <span class="text-danger" asp-validation-for="TagIds"></span>
+                    <span class="text-danger" asp-validation-for="TagId"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ColorId"></label>
+                    <select asp-for="ColorId" asp-items="new SelectList(Model.Colors, nameof(Color.Id),nameof(Color.Name))">
+                    </select>
+                    <span class="text-danger" asp-validation-for="ColorId"></span>
                 </div>
 
-                <div class="form-group">
-                    <label asp-for="ColorIds"></label>
-                    <select asp-for="ColorIds" asp-items="new SelectList(Model.Colors, nameof(Color.Id),nameof(Color.Name))">
-                       
-                    </select>
-                    <span class="text-danger" asp-validation-for="ColorIds"></span>
-                </div>
+
+
 
                 <button type="submit" class="btn btn-primary me-2">Submit</button>
                 <button class="btn btn-light" asp-controller="product" asp-action="index">Cancel</button>
