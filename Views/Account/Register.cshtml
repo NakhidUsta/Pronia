@@ -1,0 +1,47 @@
+﻿@using Pronia.Models.ViewModels;
+@model RegisterVM
+<div class="container" >
+    <div class="row" style="display:flex; justify-content:center;margin-top:10px;">
+        <div class="col-lg-6 pt-5 pt-lg-0">
+            <form method="post">
+                <div class="login-form">
+                    <h4 class="login-title">Register</h4>
+                    <div class="row">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="col-md-6 col-12">
+                            <label asp-for="FirstName">First Name</label>
+                            <input asp-for="FirstName" placeholder="First Name" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <label asp-for="LastName">Last Name</label>
+                            <input asp-for="LastName" placeholder="Last Name" />
+                            <span class="text-danger" asp-validation-for="LastName"></span>
+                        </div>
+                        <div class="col-md-12">
+                            <label asp-for="Email">Email Address*</label>
+                            <input asp-for="Email" placeholder="Email Address" />
+                            <span class="text-danger" asp-validation-for="Email"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Password">Password</label>
+                            <input type="password" asp-for="Password" placeholder="Password" />
+                            <span class="text-danger" asp-validation-for="Password"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="UserName">UserName</label>
+                            <input asp-for="UserName" placeholder="UserName" />
+                            <span class="text-danger" asp-validation-for="UserName"></span>
+                        </div>
+              
+                        <div class="col-12">
+                            <button class="btn btn-custom-size lg-size btn-pronia-primary">
+                                Register
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
