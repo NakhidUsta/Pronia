@@ -30,6 +30,7 @@ namespace Pronia.Controllers
         }
         public IActionResult Register()
         {
+            if (User.Identity.IsAuthenticated) return NotFound();
             return View();
         }
         [HttpPost]
@@ -58,6 +59,45 @@ namespace Pronia.Controllers
             }
             await userManager.AddToRoleAsync(newUser, UserRoleEnum.Member.ToString());
             await signInManager.SignInAsync(newUser, false);
+            return RedirectToAction("Index", "Home");
+        }
+        public IActionResult Login()
+        {
+            if (User.Identity.IsAuthenticated) return NotFound();
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginVM vm,string returnUrl)
+        {
+            if (!ModelState.IsValid) return View(vm);
+            AppUser user = await userManager.FindByNameAsync(vm.UserOrEmail);
+            if (user == null)
+            {
+                user =await userManager.FindByEmailAsync(vm.UserOrEmail);
+                if(user==null)
+                {
+                    
+                    ModelState.AddModelError(string.Empty, "UserName or Password incorrent!");
+                    return View(vm);
+                }
+            }
+           var res= await signInManager.PasswordSignInAsync(user, vm.Password, vm.RememberMe, true);
+            if(!res.Succeeded)
+            {
+                if (res.IsLockedOut)
+                {
+                    ModelState.AddModelError(string.Empty, "You have been blocked  for 10 second!!!");
+                    return View(vm);
+                }
+                ModelState.AddModelError(string.Empty, "UserName or Password incorrent!");
+                return View(vm);
+            }
+
+            return Redirect(returnUrl);
+        }
+        public async Task<IActionResult> LogOut()
+        {
+            await signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
     }

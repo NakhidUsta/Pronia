@@ -30,28 +30,28 @@
                         <div class="swiper-container single-product-slider">
                             <div class="swiper-wrapper">
                                 <div class="swiper-slide">
-                                    <a href="~/assets/images/website-images/@Model.ProductDetail.Images.FirstOrDefault(pi=>pi.Type==ImageType.Main)?.Url"
+                                    <a href="~/uploads/images/products/@Model.ProductDetail.Images.FirstOrDefault(pi=>pi.Type==ImageType.Main)?.Url"
                                        class="single-img gallery-popup">
                                         <img class="img-full"
-                                             src="~/assets/images/website-images/@Model.ProductDetail.Images.FirstOrDefault(pi=>pi.Type==ImageType.Main)?.Url"
+                                             src="~/uploads/images/products/@Model.ProductDetail.Images.FirstOrDefault(pi=>pi.Type==ImageType.Main)?.Url"
                                              alt="Product Image" />
                                     </a>
                                 </div>
                                 <div class="swiper-slide">
-                                    <a href="~/assets/images/website-images/@Model.ProductDetail.Images.FirstOrDefault(pi=>pi.Type==ImageType.Hover)?.Url"
+                                    <a href="~/uploads/images/products/@Model.ProductDetail.Images.FirstOrDefault(pi=>pi.Type==ImageType.Hover)?.Url"
                                        class="single-img gallery-popup">
                                         <img class="img-full"
-                                             src="~/assets/images/website-images/@Model.ProductDetail.Images.FirstOrDefault(pi=>pi.Type==ImageType.Hover)?.Url"
+                                             src="~/uploads/images/products/@Model.ProductDetail.Images.FirstOrDefault(pi=>pi.Type==ImageType.Hover)?.Url"
                                              alt="Product Image" />
                                     </a>
                                 </div>
                                 @foreach (ProductImage image in Model.ProductDetail.Images.Where(pi => pi.Type == ImageType.Additional))
                                 {
                                     <div class="swiper-slide">
-                                        <a href="~/assets/images/website-images/@image.Url"
+                                        <a href="~/uploads/images/products/@image.Url"
                                            class="single-img gallery-popup">
                                             <img class="img-full"
-                                                 src="~/assets/images/website-images/@image.Url"
+                                                 src="~/uploads/images/products/@image.Url"
                                                  alt="Product Image" />
                                         </a>
                                     </div>
@@ -64,19 +64,19 @@
                                 <div class="swiper-wrapper">
                                     <a href="#" class="swiper-slide">
                                         <img class="img-full"
-                                             src="~/assets/images/website-images/@Model.ProductDetail.Images.FirstOrDefault(pi=>pi.Type==ImageType.Main)?.Url"
+                                             src="~/uploads/images/products/@Model.ProductDetail.Images.FirstOrDefault(pi=>pi.Type==ImageType.Main)?.Url"
                                              alt="Product Thumnail" />
                                     </a>
                                     <a href="#" class="swiper-slide">
                                         <img class="img-full"
-                                             src="~/assets/images/website-images/@Model.ProductDetail.Images.FirstOrDefault(pi=>pi.Type==ImageType.Hover)?.Url"
+                                             src="~/uploads/images/products/@Model.ProductDetail.Images.FirstOrDefault(pi=>pi.Type==ImageType.Hover)?.Url"
                                              alt="Product Thumnail" />
                                     </a>
                                     @foreach (ProductImage image in Model.ProductDetail.Images.Where(pi => pi.Type == ImageType.Additional))
                                     {
                                         <a href="#" class="swiper-slide">
                                             <img class="img-full"
-                                                 src="~/assets/images/website-images/@image.Url"
+                                                 src="~/uploads/images/products/@image.Url"
                                                  alt="Product Thumnail" />
                                         </a>
                                     }
