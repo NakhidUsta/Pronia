@@ -3,7 +3,7 @@
 
 **PRONIA**
 
-**You can view the project =>** https://nakhidusta.github.io/Pronia/
+**You can view the project =>** 
 ***
 ![Screenshot (13)(1)](https://github.com/NakhidUsta/Pronia/assets/104034460/90cfffc5-70aa-4d46-8157-4635f61df483)
 
