@@ -5,6 +5,7 @@ using Pronia.Context;
 using Pronia.Extencions.Enums;
 using Pronia.Models;
 using Pronia.Models.ViewModels;
+using System.Security.Claims;
 
 namespace Pronia.Services
 {
@@ -24,44 +25,67 @@ namespace Pronia.Services
         }
         public async Task<ICollection<BasketItemVm>> GetBasketAsync()
         {
-            string? cookie = http.HttpContext.Request.Cookies["Basket"];
             ICollection<BasketItemVm> basketItems = new List<BasketItemVm>();
-            ICollection<CookieBasketItemVM> removeable = new List<CookieBasketItemVM>();
-            if (cookie != null)
+            if (http.HttpContext.User.Identity.IsAuthenticated)
             {
-                ICollection<CookieBasketItemVM>? basket = JsonConvert.DeserializeObject<ICollection<CookieBasketItemVM>>(cookie);
-                if (basket != null)
+                IEnumerable<BasketItem> dbBasketItems = await context.BasketItems
+                    .Where(bi => bi.AppUserId == http.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier))
+                    .Include(bi=>bi.Product).ThenInclude(p=>p.Images.Where(i=>i.Type==ImageType.Main))
+                    .ToListAsync();
+                foreach (BasketItem bi in dbBasketItems)
                 {
-                    foreach (CookieBasketItemVM cookieItem in basket)
+                    basketItems.Add(new BasketItemVm
                     {
-                        Product? product = await context.Products
-                            .Include(p => p.Images.Where(i => i.Type == ImageType.Main))
-                            .FirstOrDefaultAsync(p => p.Id == cookieItem.Id);
-                        if (product != null)
+                        Id = bi.Product.Id,
+                        Name = bi.Product.Name,
+                        Image =bi.Product.Images.FirstOrDefault()!.Url,
+                        Price = bi.Product.Price,
+                        Total = bi.Product.Price * bi.Count,
+                        Count =bi.Count
+
+                    });
+                }
+            }
+            else
+            {
+                string? cookie = http.HttpContext.Request.Cookies["Basket"];
+                ICollection<CookieBasketItemVM> removeable = new List<CookieBasketItemVM>();
+                if (cookie != null)
+                {
+                    ICollection<CookieBasketItemVM>? basket = JsonConvert.DeserializeObject<ICollection<CookieBasketItemVM>>(cookie);
+                    if (basket != null)
+                    {
+                        foreach (CookieBasketItemVM cookieItem in basket)
                         {
-                            basketItems.Add(new BasketItemVm
+                            Product? product = await context.Products
+                                .Include(p => p.Images.Where(i => i.Type == ImageType.Main))
+                                .FirstOrDefaultAsync(p => p.Id == cookieItem.Id);
+                            if (product != null)
                             {
-                                Id = product.Id,
-                                Name = product.Name,
-                                Image = product.Images.FirstOrDefault()!.Url,
-                                Price = product.Price,
-                                Total = product.Price * cookieItem.Count,
-                                Count = cookieItem.Count
+                                basketItems.Add(new BasketItemVm
+                                {
+                                    Id = product.Id,
+                                    Name = product.Name,
+                                    Image = product.Images.FirstOrDefault()!.Url,
+                                    Price = product.Price,
+                                    Total = product.Price * cookieItem.Count,
+                                    Count = cookieItem.Count
 
-                            });
+                                });
+
+                            }
+                            else removeable.Add(cookieItem);
 
                         }
-                        else removeable.Add(cookieItem); 
-                   
-                    }
-                    if(removeable.Count > 0)
-                    {
-                        foreach(var item in removeable)
+                        if (removeable.Count > 0)
                         {
-                            basket.Remove(item);
+                            foreach (var item in removeable)
+                            {
+                                basket.Remove(item);
+                            }
+                            string jsonBasket = JsonConvert.SerializeObject(basket);
+                            http.HttpContext.Response.Cookies.Append("Basket", jsonBasket);
                         }
-                        string jsonBasket = JsonConvert.SerializeObject(basket);
-                        http.HttpContext.Response.Cookies.Append("Basket", jsonBasket);
                     }
                 }
             }

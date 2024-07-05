@@ -6,5 +6,6 @@ namespace Pronia.Models
     {
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
+        public ICollection<BasketItem> BasketItems { get; set; }=new List<BasketItem>();
     }
 }
